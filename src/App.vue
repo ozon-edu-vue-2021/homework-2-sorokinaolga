@@ -1,18 +1,21 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <all-component :items="items" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import data from '../public/static/node_modules.json';
+import AllComponent from './components/AllComponent.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    AllComponent
+  },
+  data() { return {
+    items: [data]
+  }}
 }
 </script>
 
@@ -21,7 +24,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
