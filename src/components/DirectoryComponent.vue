@@ -1,73 +1,78 @@
 <template>
-  <div class="item-directory">
-    <div class="item-directory__head" @click="toggleOpenItem">
-      <div class="arrow_box" :class="{'arrow_box--open' : isOpen }"></div>
-      <span class="item-directory__title">{{item.name}}</span>
+  <ul>
+    <li 
+      v-for="(item, index) in items"
+      :key="`${item}-${index}`"
+    >
+
+    <file-component v-if="item.type==='file'" :item="item" />
+
+    <link-component v-if="item.type==='link'" :item="item" />
+
+    <div class="item-directory" v-if="item.type==='directory'">
+        <div class="item-directory__title" @click="toggleItemActive">
+          {{item.name}}
+        </div>
+        <div class="item-directory__content">
+            <directory-component :items="item.contents" />
+        </div>
     </div>
-    <div v-show="isOpen" class="item-directory__content">
-      <render-component :items="item.contents" />
-    </div>
-  </div>
+
+    </li>
+  </ul>
 </template>
 
 <script>
-import RenderComponent from './RenderComponent.vue';
+import FileComponent from './FileComponent.vue';
+import LinkComponent from './LinkComponent.vue';
 
 export default {
   name: 'DirectoryComponent',
+  props: ['items'],
   components: {
-    RenderComponent
-  },
-  props: ['item'],
-  data: function() {
-    return {
-      isOpen: false
-    }
+    FileComponent,
+    LinkComponent,
   },
   methods: {
-    toggleOpenItem() {
-        this.isOpen = !this.isOpen
+    toggleItemActive: function(evt) {
+      evt.target.classList.toggle('active');
     },   
   }, 
 }
 </script>
 
 <style scoped>
-.item-directory__head {
-  cursor:pointer;
-  background-color: lightgreen;
-  padding-left: 30px;
+li {
+  list-style:none;
 }
 .item-directory__title {
+  position: relative;
   font: 22px/48px 'New Roman', serif;
+  cursor:pointer;
+  background-color: #8dec8d;
+  padding-left: 40px;
+  border-radius: 8px;
+  border: 1px solid #038d03;
+  margin-bottom: 2px;
+  margin-right: 30px;
+}
+.item-directory__title:hover {
+  background-color: #67ce67;
+}
+.item-directory__title::before {
+  content: '>';
+  display: block;
+  position: absolute;
+  left: 15px;
+}
+.item-directory__title.active::before {
+  content: 'x';
 }
 .item-directory__content {
-  overflow:hidden;
+  display: none;
   width:600px;
 }
-.arrow_box {
-  width:10px;
-  height:10px;
-  transition: all .3s;
-  padding-bottom:0px;
-  position:absolute;
-  margin:20px 0px 0px -15px;
-  
-}
-.arrow_box:after, .arrow_box:before {
-	border: solid transparent;
-	content: " ";
-	position: absolute;
-}
-.arrow_box:after {
-	border-width: 5px;
-}
-.arrow_box:before {
-	border-left-color: #000;
-	border-width: 5px;
-}
-.arrow_box--open{
-   transform: rotateZ(90deg);
-   transform-origin: 50% 50%;
+.item-directory__title.active + .item-directory__content {
+  display: block;
 }
 </style>

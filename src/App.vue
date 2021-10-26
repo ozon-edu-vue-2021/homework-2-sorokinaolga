@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <all-component :items="items" />
+    <directory-component :items="items" />
   </div>
 </template>
 
 <script>
 import data from '../public/static/node_modules.json';
-import AllComponent from './components/AllComponent.vue';
+import DirectoryComponent from './components/DirectoryComponent.vue';
 
 export default {
   name: 'App',
   components: {
-    AllComponent
+    DirectoryComponent
   },
   data() { return {
     items: [data]
